@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { listRoutes } from '../function/listRoutes';
@@ -7,17 +7,20 @@ import { UserController } from '../controllers/userController';
 import { db_connection } from '../database/connect';
 import { config } from 'dotenv';
 import cookieParser from 'cookie-parser';
+import { ProductController } from '../controllers/productController';
 config();
 
 export class merchStore {
     private app: express.Application
     private authController: AuthController
     private userController: UserController
+    private productController: ProductController
 
     constructor() {
         this.app = express();
         this.authController = new AuthController();
         this.userController = new UserController();
+        this.productController = new ProductController();
         this.config();
     };
 
@@ -33,15 +36,18 @@ export class merchStore {
     private connectInDatabase(): void {
         db_connection.on('error', (err) => console.log(err));
         db_connection.once('open', () => console.log('Stabilized MongoDB connection'));
-    }
+    };
 
     private attachRoutes(): void {
+        // User routes
         this.app.post('/users/login', this.userController.loginConstroller);
         this.app.post('/users/register', this.userController.registerController);
-        this.app.get('/private', this.authController.verifyToken, (req: Request, res: Response) => {
-            return res.send('welcome to the mato');
-        })
-    }
+        
+        // Product routes  
+        this.app.get('/product/view', this.authController.verifyToken, this.productController.getProduct);
+        this.app.post('/product/create', this.authController.verifyToken, this.productController.postProduct);
+        this.app.delete('/product/delete', this.authController.verifyToken, this.productController.deleteProduct);
+    };
 
     public run(): void {
         this.connectInDatabase();
@@ -50,7 +56,7 @@ export class merchStore {
             console.log('Active routes: '); 
             listRoutes(this.app).forEach((routes) => {
                 console.log(routes);
-            })
+            });
         });
-    }
-}
+    };
+};

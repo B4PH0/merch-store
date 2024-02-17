@@ -10,7 +10,7 @@ export function listRoutes(app: Application): Array<string> {
                 (method) => method !== '_all'
             );
             methods.forEach((method) => {
-                routes.push(`${prefix}${route.path}`);
+                routes.push(`${prefix}${route.path} - ${method.toUpperCase()}`);
             });
         } else if (layer.name === 'router' && layer.handle.stack) {
             layer.handle.stack.forEarch((stackItem: any) => {
