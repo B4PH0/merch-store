@@ -30,6 +30,7 @@ export class ProductController {
                     description: description,
                     price: price,
                 });
+                return res.status(201).json({ status: 201, message: "Product created."});
                 next();
             } catch (error) {
                 return res.status(409).json({ status: 409, message: "Failed to create product."});
