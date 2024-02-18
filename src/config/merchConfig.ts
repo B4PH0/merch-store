@@ -44,9 +44,9 @@ export class merchStore {
         this.app.post('/users/register', this.userController.registerController);
         
         // Product routes  
-        this.app.get('/product/view', this.authController.verifyToken, this.productController.getProduct);
-        this.app.post('/product/create', this.authController.verifyToken, this.productController.postProduct);
-        this.app.delete('/product/delete', this.authController.verifyToken, this.productController.deleteProduct);
+        this.app.get('/product/view/:id', this.authController.verifyToken, this.productController.getProduct);
+        this.app.post('/product/create/', this.authController.verifyToken, this.productController.postProduct);
+        this.app.delete('/product/delete/:id', this.authController.verifyToken, this.productController.deleteProduct);
     };
 
     public run(): void {
