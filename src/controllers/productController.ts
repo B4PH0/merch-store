@@ -45,7 +45,8 @@ export class ProductController {
         const findProductById = await productModel.findOne({ idProduct: id });
         if (findProductById) {
             try {
-                await productModel.deleteOne({ findProductById });
+                await productModel.deleteOne({ idProduct: id });
+                return res.status(200).json({ status: 200, message: "Excluded product."});
                 next();
             } catch (error) {
                 return res.status(409).json({ status: 409, message: "Failed to delete product."});

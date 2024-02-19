@@ -6,9 +6,7 @@ export function listRoutes(app: Application): Array<string> {
     const addRoutes = (prefix: string, layer: any) => {
         if (layer.route) {
             const route = layer.route;
-            const methods = Object.keys(route.methods).filter(
-                (method) => method !== '_all'
-            );
+            const methods = Object.keys(route.methods).filter((method) => method !== '_all');
             methods.forEach((method) => {
                 routes.push(`${prefix}${route.path} - ${method.toUpperCase()}`);
             });
